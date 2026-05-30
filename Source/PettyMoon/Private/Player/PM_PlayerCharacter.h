@@ -19,7 +19,7 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
-
+	virtual void PawnClientRestart() override;	
 private:
 	UPROPERTY(VisibleDefaultsOnly, Category = "View")
 	TObjectPtr<class USpringArmComponent> SpringArm;

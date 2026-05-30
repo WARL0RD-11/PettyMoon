@@ -12,10 +12,17 @@ APM_PlayerCharacter::APM_PlayerCharacter()
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	SpringArm->SetupAttachment(RootComponent);
 
+	SpringArm->TargetArmLength = 500.f;
+
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
 
 }
+
+void APM_PlayerCharacter::PawnClientRestart()
+{
+	Super::PawnClientRestart();
+}	
 
 void APM_PlayerCharacter::BeginPlay()
 {
