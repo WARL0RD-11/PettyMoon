@@ -2,23 +2,22 @@
 
 
 #include "Character/PM_Character.h"
+#include "Components/SkeletalMeshComponent.h"
 
-// Sets default values
 APM_Character::APM_Character()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 }
 
-// Called when the game starts or when spawned
 void APM_Character::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
-// Called every frame
 void APM_Character::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
