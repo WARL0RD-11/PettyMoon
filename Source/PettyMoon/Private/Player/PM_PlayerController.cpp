@@ -47,6 +47,8 @@ void APM_PlayerController::SetupInputComponent()
 	if(EIC)
 	{
 		EIC->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ThisClass::HandleJumpAction);
+		EIC->BindAction(LookAction, ETriggerEvent::Triggered, this, &ThisClass::HandleLookAction);
+		EIC->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ThisClass::HandleMoveAction);
 	}	
 }
 
@@ -55,5 +57,29 @@ void APM_PlayerController::HandleJumpAction(const FInputActionValue& Value)
 	if (ACharacter* ControlledCharacter = Cast<ACharacter>(ControlledPawn))
 	{
 		ControlledCharacter->Jump();
+	}
+}
+
+void APM_PlayerController::HandleLookAction(const FInputActionValue& Value)
+{
+	FVector2D LookAxisValue = Value.Get<FVector2D>();
+	AddPitchInput(-1 *LookAxisValue.Y);
+	AddYawInput(LookAxisValue.X);
+}
+
+void APM_PlayerController::HandleMoveAction(const FInputActionValue& Value)
+{
+	if (!IsLocalController()) return;
+
+	FVector2D MoveAxisValue = Value.Get<FVector2D>();
+	MoveAxisValue.Normalize();
+	const FRotator YawRotation(0, GetControlRotation().Yaw, 0);
+	const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+	const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+
+	if (ACharacter* ControlledCharacter = Cast<ACharacter>(ControlledPawn))
+	{
+		ControlledCharacter->AddMovementInput(ForwardDirection, MoveAxisValue.Y);
+		ControlledCharacter->AddMovementInput(RightDirection, MoveAxisValue.X);
 	}
 }

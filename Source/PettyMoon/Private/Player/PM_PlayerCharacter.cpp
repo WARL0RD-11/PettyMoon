@@ -13,9 +13,12 @@ APM_PlayerCharacter::APM_PlayerCharacter()
 	SpringArm->SetupAttachment(RootComponent);
 
 	SpringArm->TargetArmLength = 500.f;
+	SpringArm->bUsePawnControlRotation = true;
 
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
+
+	bUseControllerRotationYaw = false;
 
 }
 

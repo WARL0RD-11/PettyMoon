@@ -29,10 +29,20 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "Inputs|Actions")
 	TObjectPtr<class UInputAction> JumpAction;	
+
+
+	UPROPERTY(EditAnywhere, Category = "Inputs|Actions")
+	TObjectPtr<class UInputAction> LookAction;
+
+	UPROPERTY(EditAnywhere, Category = "Inputs|Actions")
+	TObjectPtr<class UInputAction> MoveAction;
 	
 private:
 	APawn* ControlledPawn;	
 	void HandleJumpAction(const FInputActionValue& Value);	
 
-	
+	void HandleLookAction(const FInputActionValue& Value);
+
+	void HandleMoveAction(const FInputActionValue& Value);
 };
+ 
