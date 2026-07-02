@@ -63,7 +63,7 @@ void APM_PlayerController::HandleJumpAction(const FInputActionValue& Value)
 void APM_PlayerController::HandleLookAction(const FInputActionValue& Value)
 {
 	FVector2D LookAxisValue = Value.Get<FVector2D>();
-	AddPitchInput(-1 *LookAxisValue.Y);
+	AddPitchInput(-1 * LookAxisValue.Y);
 	AddYawInput(LookAxisValue.X);
 }
 
