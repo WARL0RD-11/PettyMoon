@@ -13,6 +13,24 @@ UCLASS()
 class UPM_AnimInstance : public UAnimInstance
 {
 	GENERATED_BODY()
+
+public:
+
+	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
+	FORCEINLINE float GetSpeed() const { return Speed; }
+	
+	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
+	FORCEINLINE bool bIsMoving() const { return Speed != 0.0f; }
+	
+	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
+	FORCEINLINE bool bIsNotMoving() const { return Speed == 0.0f; }
+	
+	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
+	FORCEINLINE float GetLean() const { return Lean; }
+	
+	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
+	FORCEINLINE float GetLeanSpeed() const { return LeanSpeed; }
+
 protected:
 	virtual void NativeInitializeAnimation() override;
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
@@ -24,4 +42,16 @@ private:
 	
 	UPROPERTY()
 	TObjectPtr<class UCharacterMovementComponent> MovementComponent;
+	
+	//Control Variables
+	float Speed;
+	float Lean;
+	FRotator PrevBodyRot;
+	
+	//Tunable Variable
+	UPROPERTY(EditAnywhere, Category = "Movement")
+	float LeanSpeed; //Smoothed Lean Speed
+	
+	UPROPERTY(EditAnywhere, Category = "Animation")
+	float InterpLeanSpeed = 1.f;
 };
