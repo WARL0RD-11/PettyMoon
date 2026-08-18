@@ -31,6 +31,12 @@ public:
 	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
 	FORCEINLINE float GetLeanSpeed() const { return LeanSpeed; }
 
+	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
+	FORCEINLINE bool IsInAir() const { return bIsJumping; }
+
+	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
+	FORCEINLINE bool IsOnGround() const { return !bIsJumping; }
+
 protected:
 	virtual void NativeInitializeAnimation() override;
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
@@ -54,4 +60,7 @@ private:
 	
 	UPROPERTY(EditAnywhere, Category = "Animation")
 	float InterpLeanSpeed = 1.f;
+
+	//Jumping
+	bool bIsJumping;
 };

@@ -34,7 +34,8 @@ void UPM_AnimInstance :: NativeUpdateAnimation(float DeltaSeconds)
 		InterpLeanSpeed);
 	//Lean ENDS
 	
-
+	//Jumping Logic
+	bIsJumping = MovementComponent->IsFalling();
 }
 
 void UPM_AnimInstance::NativeThreadSafeUpdateAnimation(float DeltaSeconds)
