@@ -18,30 +18,43 @@ public:
 
 	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
 	FORCEINLINE float GetSpeed() const { return Speed; }
+
 	
 	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
 	FORCEINLINE bool bIsMoving() const { return Speed != 0.0f; }
+
 	
 	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
 	FORCEINLINE bool bIsNotMoving() const { return Speed == 0.0f; }
+
 	
 	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
 	FORCEINLINE float GetLean() const { return Lean; }
+
 	
 	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
 	FORCEINLINE float GetLeanSpeed() const { return LeanSpeed; }
 
+
 	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
 	FORCEINLINE bool IsInAir() const { return bIsJumping; }
 
+
 	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
 	FORCEINLINE bool IsOnGround() const { return !bIsJumping; }
+
+
+	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
+	FORCEINLINE float LookOffsetYaw() const { return LookRotOffset.Yaw; }
+
+	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
+	FORCEINLINE float LookOffsetPitch() const { return LookRotOffset.Pitch; }
 
 protected:
 	virtual void NativeInitializeAnimation() override;
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 	virtual void NativeThreadSafeUpdateAnimation(float DeltaSeconds) override;
-	
+
 private:
 	UPROPERTY()
 	TObjectPtr<class ACharacter> OwnerCharacter;
@@ -50,8 +63,12 @@ private:
 	TObjectPtr<class UCharacterMovementComponent> MovementComponent;
 	
 	//Control Variables
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	float Speed;
+
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	float Lean;
+
 	FRotator PrevBodyRot;
 	
 	//Tunable Variable
@@ -62,5 +79,10 @@ private:
 	float InterpLeanSpeed = 1.f;
 
 	//Jumping
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	bool bIsJumping;
+
+	//Look Offset
+	FRotator LookRotOffset;
+
 };

@@ -21,17 +21,12 @@ void APM_PlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	ControlledPawn = GetPawn();
+	if (!IsLocalController()) return;
 
-	if (!ControlledPawn) return;
-
-	if (IsLocalController())
+	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::
+		 GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
 	{
-		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::
-			GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
-		{
-			Subsystem->AddMappingContext(DefaultMappingContext, 0);
-		}
+		Subsystem->AddMappingContext(DefaultMappingContext, 0);
 	}
 	
 }
@@ -54,7 +49,8 @@ void APM_PlayerController::SetupInputComponent()
 
 void APM_PlayerController::HandleJumpAction(const FInputActionValue& Value)
 {
-	if (ACharacter* ControlledCharacter = Cast<ACharacter>(ControlledPawn))
+
+	if (ACharacter* ControlledCharacter = Cast<ACharacter>(GetPawn()))
 	{
 		ControlledCharacter->Jump();
 	}
@@ -77,7 +73,7 @@ void APM_PlayerController::HandleMoveAction(const FInputActionValue& Value)
 	const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 	const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
-	if (ACharacter* ControlledCharacter = Cast<ACharacter>(ControlledPawn))
+	if (ACharacter* ControlledCharacter = Cast<ACharacter>(GetPawn()))
 	{
 		ControlledCharacter->AddMovementInput(ForwardDirection, MoveAxisValue.Y);
 		ControlledCharacter->AddMovementInput(RightDirection, MoveAxisValue.X);

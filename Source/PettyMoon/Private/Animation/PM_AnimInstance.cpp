@@ -14,15 +14,57 @@ void UPM_AnimInstance :: NativeInitializeAnimation()
 	if (!OwnerCharacter) return;
 	
 	MovementComponent = OwnerCharacter->GetCharacterMovement();
+	PrevBodyRot = OwnerCharacter->GetActorRotation();
 }
 
 void UPM_AnimInstance :: NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
-	
-	if (!OwnerCharacter) return;
-	
-	Speed = OwnerCharacter->GetVelocity().Length();
+
+	//Re- Acquring Character and Movement Component in case they are not set
+
+	if (!OwnerCharacter)
+	{
+		OwnerCharacter = Cast<ACharacter>(TryGetPawnOwner());
+
+		if (!OwnerCharacter)
+		{
+			UE_LOG(
+				LogTemp,
+				Warning,
+				TEXT("AnimInstance [%s]: NO PAWN OWNER"),
+				*GetName()
+			);
+
+			return;
+		}
+	}
+
+	if (!MovementComponent)
+	{
+		MovementComponent = OwnerCharacter->GetCharacterMovement();
+
+		if (!MovementComponent)
+		{
+			return;
+		}
+	}
+
+	Speed = OwnerCharacter->GetVelocity().Size2D();
+	UE_LOG(
+		LogTemp,
+		Warning,
+		TEXT("[%s] Char=%s Role=%d Velocity=%s Speed=%.2f Falling=%d"),
+		*GetName(),
+		*OwnerCharacter->GetName(),
+		static_cast<int32>(OwnerCharacter->GetLocalRole()),
+		*OwnerCharacter->GetVelocity().ToString(),
+		Speed,
+		bIsJumping
+	);
+
+		//Jumping Logic
+	bIsJumping = MovementComponent->IsFalling();
 	
 	//Lean Logic
 	FRotator BodyRot = OwnerCharacter->GetActorRotation();
@@ -32,10 +74,13 @@ void UPM_AnimInstance :: NativeUpdateAnimation(float DeltaSeconds)
 	Lean = BodyRotDelta.Yaw / DeltaSeconds;
 	LeanSpeed = FMath::FInterpTo(LeanSpeed, Lean, DeltaSeconds, 
 		InterpLeanSpeed);
-	//Lean ENDS
 	
-	//Jumping Logic
-	bIsJumping = MovementComponent->IsFalling();
+
+
+	//Look Offset Logic
+	FRotator ControlRot = OwnerCharacter->GetBaseAimRotation();
+	LookRotOffset = UKismetMathLibrary::NormalizedDeltaRotator(ControlRot, BodyRot);
+
 }
 
 void UPM_AnimInstance::NativeThreadSafeUpdateAnimation(float DeltaSeconds)
