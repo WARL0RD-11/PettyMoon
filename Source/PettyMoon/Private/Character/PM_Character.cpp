@@ -3,10 +3,21 @@
 
 #include "Character/PM_Character.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 APM_Character::APM_Character()
 {
 	PrimaryActorTick.bCanEverTick = true;
+
+    bReplicates = true;
+
+    SetReplicateMovement(true);
+
+    if (UCharacterMovementComponent* MovementComponent =
+        GetCharacterMovement())
+    {
+        MovementComponent->SetIsReplicated(true);
+    }
 
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 

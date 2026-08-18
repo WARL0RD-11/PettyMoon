@@ -51,17 +51,6 @@ void UPM_AnimInstance :: NativeUpdateAnimation(float DeltaSeconds)
 	}
 
 	Speed = OwnerCharacter->GetVelocity().Size2D();
-	UE_LOG(
-		LogTemp,
-		Warning,
-		TEXT("[%s] Char=%s Role=%d Velocity=%s Speed=%.2f Falling=%d"),
-		*GetName(),
-		*OwnerCharacter->GetName(),
-		static_cast<int32>(OwnerCharacter->GetLocalRole()),
-		*OwnerCharacter->GetVelocity().ToString(),
-		Speed,
-		bIsJumping
-	);
 
 		//Jumping Logic
 	bIsJumping = MovementComponent->IsFalling();

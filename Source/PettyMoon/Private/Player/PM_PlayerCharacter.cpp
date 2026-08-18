@@ -4,6 +4,8 @@
 #include "Player/PM_PlayerCharacter.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "GameFramework/PlayerState.h"
 
 APM_PlayerCharacter::APM_PlayerCharacter()
 {
@@ -36,5 +38,5 @@ void APM_PlayerCharacter::BeginPlay()
 void APM_PlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
+
